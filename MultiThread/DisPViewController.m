@@ -22,7 +22,7 @@
 
     self.view.backgroundColor = [UIColor purpleColor];
 //    [self startThread1];
-    [self startRequestNetwork];
+    [self groupStartRequestNetwork];
 }
 
 #pragma mark -
@@ -66,7 +66,7 @@
     });
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC));
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         NSLog(@"wait log");
     });
 }
@@ -142,7 +142,7 @@
 }
 
 #pragma mark -
-#pragma mark - network
+#pragma mark - network1
 - (void)startRequestNetwork{
     [self reqeustAllApi:^(NSString *responseData) {
         NSLog(@"thread - %@, responseData - %@", [NSThread currentThread], responseData);
@@ -228,6 +228,103 @@
 }
 
 - (void)apiRequest:(void(^)(NSString *responseData))successBlock{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        int sleepTime = arc4random() % 4 + 2;
+        sleep(sleepTime);
+        NSString *responseData = [NSString stringWithFormat:@"%d", sleepTime];
+        successBlock(responseData);
+    });
+}
+
+#pragma mark -
+#pragma mark - network2
+- (void)groupStartRequestNetwork{
+    [self reqeustAllApi:^(NSString *responseData) {
+        NSLog(@"thread - %@, responseData - %@", [NSThread currentThread], responseData);
+    }];
+}
+
+- (void)groupReqeustAllApi:(void(^)(NSString *responseData))successBlock{
+    
+    dispatch_group_t group = dispatch_group_create();
+    __block NSString *result1, *result2, *result3;
+    
+    
+    dispatch_group_enter(group);
+    [self groupRequest1:^(NSString *responseData) {
+        
+        result1 = responseData;
+        NSLog(@"%@", result1);
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self groupRequest2:^(NSString *responseData) {
+        
+        result2 = responseData;
+        NSLog(@"%@", result2);
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_enter(group);
+    [self groupRequest3:^(NSString *responseData) {
+        
+        result3 = responseData;
+        NSLog(@"%@", result3);
+        dispatch_group_leave(group);
+    }];
+    
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+        
+        [self groupRequestFinalresult1:result1
+                               result2:result2
+                               result3:result3
+                          successBlock:^(NSString *responseData) {
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                  successBlock(responseData);
+                              });
+                          }];
+        
+    });
+    
+}
+
+- (void)groupRequest1:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"1");
+    }];
+}
+
+- (void)groupRequest2:(void(^)(NSString *responseData))successBlock{
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"2");
+    }];
+}
+
+- (void)groupRequest3:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"3");
+    }];
+}
+
+- (void)groupRequestFinalresult1:(NSString *)result1
+                         result2:(NSString *)result2
+                         result3:(NSString *)result3
+                    successBlock:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        
+        NSString *finalResult = [NSString stringWithFormat:@"%@%@%@", result1, result2, result3];
+        successBlock(finalResult);
+    }];
+}
+
+- (void)groupApiRequest:(void(^)(NSString *responseData))successBlock{
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         int sleepTime = arc4random() % 4 + 2;
         sleep(sleepTime);

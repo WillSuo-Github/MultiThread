@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5457C7051EAB9DEE007FE0A2 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 5457C7041EAB9DEE007FE0A2 /* Person.m */; };
+		5457C70E1EACF929007FE0A2 /* DisPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5457C70D1EACF929007FE0A2 /* DisPViewController.m */; };
 		54EF8A841E82C3A100C501AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 54EF8A831E82C3A100C501AC /* main.m */; };
 		54EF8A871E82C3A100C501AC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 54EF8A861E82C3A100C501AC /* AppDelegate.m */; };
 		54EF8A8A1E82C3A100C501AC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54EF8A891E82C3A100C501AC /* ViewController.m */; };
@@ -32,6 +33,8 @@
 /* Begin PBXFileReference section */
 		5457C7031EAB9DEE007FE0A2 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		5457C7041EAB9DEE007FE0A2 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		5457C70C1EACF929007FE0A2 /* DisPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisPViewController.h; sourceTree = "<group>"; };
+		5457C70D1EACF929007FE0A2 /* DisPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisPViewController.m; sourceTree = "<group>"; };
 		54EF8A7F1E82C3A100C501AC /* MultiThread.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiThread.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54EF8A831E82C3A100C501AC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		54EF8A851E82C3A100C501AC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -98,6 +101,8 @@
 				54EF8AAB1E82C5C700C501AC /* NSThreadViewController.m */,
 				54EF8AB61E83D68F00C501AC /* NSOperationViewController.h */,
 				54EF8AB71E83D68F00C501AC /* NSOperationViewController.m */,
+				5457C70C1EACF929007FE0A2 /* DisPViewController.h */,
+				5457C70D1EACF929007FE0A2 /* DisPViewController.m */,
 				54EF8A8B1E82C3A100C501AC /* Main.storyboard */,
 				54EF8A8E1E82C3A100C501AC /* Assets.xcassets */,
 				54EF8A901E82C3A100C501AC /* LaunchScreen.storyboard */,
@@ -230,6 +235,7 @@
 			files = (
 				5457C7051EAB9DEE007FE0A2 /* Person.m in Sources */,
 				54EF8A8A1E82C3A100C501AC /* ViewController.m in Sources */,
+				5457C70E1EACF929007FE0A2 /* DisPViewController.m in Sources */,
 				54EF8AB81E83D68F00C501AC /* NSOperationViewController.m in Sources */,
 				54EF8A871E82C3A100C501AC /* AppDelegate.m in Sources */,
 				54EF8A841E82C3A100C501AC /* main.m in Sources */,

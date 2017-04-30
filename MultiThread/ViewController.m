@@ -9,11 +9,14 @@
 #import "ViewController.h"
 #import "NSThreadViewController.h"
 #import "NSOperationViewController.h"
+#import "DisPViewController.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, copy) NSArray *sourceArr;
+
+@property (nonatomic, strong) DisPViewController *dispVc;
 @end
 
 @implementation ViewController
@@ -47,7 +50,9 @@
         case 0:
             [self presentViewController:[[NSThreadViewController alloc] init] animated:true completion:nil];
             break;
-            
+        case 1:
+            [self presentViewController:[[DisPViewController alloc] init] animated:true completion:nil];
+            break;
         case 2:
             [self presentViewController:[[NSOperationViewController alloc] init] animated:true completion:nil];
             break;
@@ -76,6 +81,13 @@
         _sourceArr = @[@"NSThread", @"Dispath", @"NSOperation"];
     }
     return _sourceArr;
+}
+
+- (DisPViewController *)dispVc{
+    if (_dispVc == nil) {
+        _dispVc = [[DisPViewController alloc] init];
+    }
+    return _dispVc;
 }
 
 

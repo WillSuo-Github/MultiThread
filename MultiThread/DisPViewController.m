@@ -10,6 +10,7 @@
 
 @interface DisPViewController ()
 
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
 @end
 
 @implementation DisPViewController
@@ -21,7 +22,7 @@
 
     self.view.backgroundColor = [UIColor purpleColor];
 //    [self startThread1];
-    [self startThread6];
+    [self startRequestNetwork];
 }
 
 #pragma mark -
@@ -140,6 +141,98 @@
     });
 }
 
+#pragma mark -
+#pragma mark - network
+- (void)startRequestNetwork{
+    [self reqeustAllApi:^(NSString *responseData) {
+        NSLog(@"thread - %@, responseData - %@", [NSThread currentThread], responseData);
+    }];
+}
 
+- (void)reqeustAllApi:(void(^)(NSString *responseData))successBlock{
+    _semaphore = dispatch_semaphore_create(0);
+    __block NSString *result1, *result2, *result3;
+    
+    
+    [self request1:_semaphore successBlock:^(NSString *responseData) {
+        
+        result1 = responseData;
+        NSLog(@"%@", result1);
+    }];
+    
+    [self request2:_semaphore successBlock:^(NSString *responseData) {
+        
+        result2 = responseData;
+        NSLog(@"%@", result2);
+    }];
+    
+    [self request3:_semaphore successBlock:^(NSString *responseData) {
+        
+        result3 = responseData;
+        NSLog(@"%@", result3);
+    }];
+    
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+        
+        [self requestFinalresult1:result1
+                          result2:result2
+                          result3:result3
+                     successBlock:^(NSString *responseData) {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             successBlock(responseData);
+                         });
+                     }];
+        
+    });
+    
+}
 
+- (void)request1:(dispatch_semaphore_t)semaphore successBlock:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"1");
+        dispatch_semaphore_signal(semaphore);
+    }];
+}
+
+- (void)request2:(dispatch_semaphore_t)semaphore successBlock:(void(^)(NSString *responseData))successBlock{
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"2");
+        dispatch_semaphore_signal(semaphore);
+    }];
+}
+
+- (void)request3:(dispatch_semaphore_t)semaphore successBlock:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        successBlock(@"3");
+        dispatch_semaphore_signal(semaphore);
+    }];
+}
+
+- (void)requestFinalresult1:(NSString *)result1
+                    result2:(NSString *)result2
+                    result3:(NSString *)result3
+               successBlock:(void(^)(NSString *responseData))successBlock{
+    
+    [self apiRequest:^(NSString *responseData) {
+        
+        NSString *finalResult = [NSString stringWithFormat:@"%@%@%@", result1, result2, result3];
+        successBlock(finalResult);
+    }];
+}
+
+- (void)apiRequest:(void(^)(NSString *responseData))successBlock{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        int sleepTime = arc4random() % 4 + 2;
+        sleep(sleepTime);
+        NSString *responseData = [NSString stringWithFormat:@"%d", sleepTime];
+        successBlock(responseData);
+    });
+}
 @end

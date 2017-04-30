@@ -239,7 +239,7 @@
 #pragma mark -
 #pragma mark - network2
 - (void)groupStartRequestNetwork{
-    [self reqeustAllApi:^(NSString *responseData) {
+    [self groupReqeustAllApi:^(NSString *responseData) {
         NSLog(@"thread - %@, responseData - %@", [NSThread currentThread], responseData);
     }];
 }
@@ -289,6 +289,20 @@
                           }];
         
     });
+    
+//    dispatch_group_notify(group, dispatch_get_global_queue(0, 0), ^{
+//        
+//        NSLog(@"%@", [NSThread currentThread]);
+//        
+//        [self groupRequestFinalresult1:result1
+//                               result2:result2
+//                               result3:result3
+//                          successBlock:^(NSString *responseData) {
+//                              dispatch_async(dispatch_get_main_queue(), ^{
+//                                  successBlock(responseData);
+//                              });
+//                          }];
+//    });
     
 }
 
